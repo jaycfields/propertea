@@ -30,10 +30,11 @@
       nil)))
 
 (defn parse-bool-fn [v]
-  (condp = (clojure.string/lower-case v)
-      "true" true
-      "false" false
-      nil))
+  (when v
+    (condp = (clojure.string/lower-case v)
+        "true" true
+        "false" false
+        nil)))
 
 (defn parse [m f ks]
   (reduce (fn [r e] (assoc r e (f (e r))))

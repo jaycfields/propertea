@@ -19,3 +19,11 @@
 
 (expect nil
         (:string-example (read-properties fp :parse-boolean [:string-example])))
+
+(expect nil (:l (read-properties fp :parse-int [:l])))
+
+(expect nil (:l (read-properties fp :parse-boolean [:l])))
+
+;;; add default support
+;;; support empty string not being okay if required
+;;; add not-nil support

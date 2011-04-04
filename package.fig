@@ -1,6 +1,6 @@
-resource "propertea-1.0.0.jar"
+resource "propertea.jar"
 
 config default
-  append CLASSPATH=@/propertea-1.0.0.jar
-  append SOURCEPATH=@/propertea-1.0.0.jar
+  append CLASSPATH=@/propertea.jar
+  append SOURCEPATH=@/propertea.jar
 end
