@@ -4,7 +4,10 @@
 
 ## An Example
 
-propertea can be used to load a property file, convert, and validate. The following snippet shows loading a file and converting a few of the properties to their desired types.<pre>
+propertea can be used to load a property file, convert, and
+validate. The following snippet shows loading a file and converting a
+few of the properties to their desired types.
+<pre>
 ;Given the following properties file
 ;string-example=hello-string
 ;int-example=1
@@ -20,7 +23,8 @@ propertea can be used to load a property file, convert, and validate. The follow
 (println props) 
 ; => {:int-example 1, :string-example "hello-string", :boolean-example true}
 </pre>
-propertea can also validate that required properties are specified.<pre>
+propertea can also validate that required properties are specified.
+<pre>
 ; assuming the same properties file as above
 
 (ns example 
