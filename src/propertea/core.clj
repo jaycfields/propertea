@@ -1,5 +1,5 @@
 (ns propertea.core
-  (:require clojure.walk clojure.set)
+  (:require clojure.walk clojure.set clojure.string)
   (:import [java.io FileReader]
            [java.util Properties]))
 
@@ -23,6 +23,18 @@
       (println (str k "=" v))))
   m)
 
+(defn parse-int-fn [v]
+  (try
+    (Integer/parseInt v)
+    (catch NumberFormatException e
+      nil)))
+
+(defn parse-bool-fn [v]
+  (condp = (clojure.string/lower-case v)
+      "true" true
+      "false" false
+      nil))
+
 (defn parse [m f ks]
   (reduce (fn [r e] (assoc r e (f (e r))))
           m
@@ -37,5 +49,5 @@
       properties->map
       (validate required)
       (dump-if dump)
-      (parse #(Integer/parseInt %) parse-int)
-      (parse #(Boolean/parseBoolean %) parse-boolean)))
+      (parse parse-int-fn parse-int)
+      (parse parse-bool-fn parse-boolean)))

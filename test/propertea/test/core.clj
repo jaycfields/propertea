@@ -11,11 +11,11 @@
 
 (expect 1 (:int-example (read-properties fp :parse-int [:int-example])))
 
-(expect NumberFormatException
+(expect nil
         (:string-example (read-properties fp :parse-int [:string-example])))
 
 (expect true?
         (:boolean-example (read-properties fp :parse-boolean [:boolean-example])))
 
-(expect false?
+(expect nil
         (:string-example (read-properties fp :parse-boolean [:string-example])))
