@@ -1,4 +1,4 @@
-(defproject propertea "1.0.4"
+(defproject propertea "1.0.5"
   :description "load, coerce, and validate property files"
   :jar-name "propertea.jar"
   :dependencies [[org.clojure/clojure "1.2.0"]

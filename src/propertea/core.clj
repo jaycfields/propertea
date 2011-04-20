@@ -17,10 +17,10 @@
       (throw (RuntimeException. (str not-found " are required, but not found")))
       m)))
 
-(defn dump-if [m flag]
-  (when flag
+(defn dump [m f]
+  (when f
     (doseq [[k v] m]
-      (println (str k "=" v))))
+      (f (pr-str k v))))
   m)
 
 (defn parse-int-fn [v]
@@ -41,7 +41,7 @@
           m
           ks))
 
-(defn read-properties [file-name & {:keys [dump
+(defn read-properties [file-name & {:keys [dump-fn
                                            required
                                            parse-int
                                            parse-boolean]}]
@@ -49,6 +49,6 @@
       file-name->properties
       properties->map
       (validate required)
-      (dump-if dump)
       (parse parse-int-fn parse-int)
-      (parse parse-bool-fn parse-boolean)))
+      (parse parse-bool-fn parse-boolean)
+      (dump dump-fn)))
