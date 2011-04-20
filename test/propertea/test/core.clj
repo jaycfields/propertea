@@ -27,3 +27,4 @@
 ;;; add default support
 ;;; support empty string not being okay if required
 ;;; add not-nil support
+;;; convert a map to a properties object
