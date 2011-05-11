@@ -48,12 +48,16 @@
         nil)))
 
 (defn parse [m f ks]
-  (reduce (fn [r e] (assoc r e (f (e r))))
-          m
-          ks))
+  (reduce
+   (fn [r e]
+     (if (contains? r e)
+       (assoc r e (f (e r)))
+       r))
+   m
+   ks))
 
 (defn append [m defaults]
-  (merge m (apply hash-map defaults)))
+  (merge (apply hash-map defaults) m))
 
 (defn read-properties [file-name & {:keys [dump-fn
                                            required

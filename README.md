@@ -36,7 +36,7 @@ propertea can also validate that required properties are specified.
 
 ## Installing
 
-The easiest way is via Leiningen. Add the following dependency to your project.clj file:<pre>[propertea "1.2.0"]</pre>
+The easiest way is via Leiningen. Add the following dependency to your project.clj file:<pre>[propertea "1.2.1"]</pre>
 To build from source, run the following commands:<pre>lein deps
 lein jar</pre>
 

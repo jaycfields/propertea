@@ -29,6 +29,12 @@
 ;;; include a default value if a value doesn't exist
 (expect :def-val (:l (read-properties fp :default [:l :def-val])))
 
+;;; don't include a default value if a value does exist
+(expect "hello-string" (:string-example (read-properties fp :default [:string-example :def-val])))
+
+;;; include a default value even if parsing fails due to it not existing
+(expect true? (:l (read-properties fp :default [:l true] :parse-boolean [:l])))
+
 ;;; throw an exception if something is required and doesn't exist
 (expect RuntimeException (read-properties fp :required [:foo :int-example]))
 
