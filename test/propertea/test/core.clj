@@ -5,26 +5,38 @@
 
 (def fp (clojure.java.io/file "test/fake.properties"))
 
+;;; read a string
 (expect "hello-string" (:string-example (read-properties fp)))
 
-(expect RuntimeException (read-properties fp :required [:foo :int-example]))
-
+;;; read and convert the string into an int
 (expect 1 (:int-example (read-properties fp :parse-int [:int-example])))
 
-(expect nil
-        (:string-example (read-properties fp :parse-int [:string-example])))
+;;; read and convert an invalid int string into nil
+(expect nil (:string-example (read-properties fp :parse-int [:string-example])))
 
-(expect true?
-        (:boolean-example (read-properties fp :parse-boolean [:boolean-example])))
+;;; read and convert the string into a boolean
+(expect true? (:boolean-example (read-properties fp :parse-boolean [:boolean-example])))
 
-(expect nil
-        (:string-example (read-properties fp :parse-boolean [:string-example])))
+;;; read and convert an invalid bool string into nil
+(expect nil (:string-example (read-properties fp :parse-boolean [:string-example])))
 
+;;; add nil to the properties if attempting to int parse a non-existent value
 (expect nil (:l (read-properties fp :parse-int [:l])))
 
+;;; add nil to the properties if attempting to bool parse a non-existent value
 (expect nil (:l (read-properties fp :parse-boolean [:l])))
 
-;;; add default support
-;;; support empty string not being okay if required
-;;; add not-nil support
+;;; include a default value if a value doesn't exist
+(expect :def-val (:l (read-properties fp :default [:l :def-val])))
+
+;;; throw an exception if something is required and doesn't exist
+(expect RuntimeException (read-properties fp :required [:foo :int-example]))
+
+;;; throw an exception if something exists but is an empty string
+(expect RuntimeException (read-properties fp :required [:empty-string]))
+
+;;; throw an exception if invalid parsing occurs, resulting in nil
+;;; and it is also required
+(expect RuntimeException (read-properties fp :required [:string-example] :parse-int [:string-example]))
+
 ;;; convert a map to a properties object

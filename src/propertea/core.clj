@@ -10,8 +10,19 @@
   (doto (Properties.)
     (.load (FileReader. file-name))))
 
+(defmulti valid? class :default :default)
+
+(defmethod valid? String [a]
+  (seq a))
+
+(defmethod valid? nil [a]
+  false)
+
+(defmethod valid? :default [a]
+  true)
+
 (defn validate [m required-list]
-  (let [ks (set (keys m))
+  (let [ks (reduce (fn [r [k v]] (if (valid? v) (conj r k) r)) #{} m)
         rks (set required-list)]
     (if-let [not-found (seq (clojure.set/difference rks ks))]
       (throw (RuntimeException. (str not-found " are required, but not found")))
@@ -41,14 +52,19 @@
           m
           ks))
 
+(defn append [m defaults]
+  (merge m (apply hash-map defaults)))
+
 (defn read-properties [file-name & {:keys [dump-fn
                                            required
                                            parse-int
-                                           parse-boolean]}]
+                                           parse-boolean
+                                           default]}]
   (-> file-name
       file-name->properties
       properties->map
-      (validate required)
       (parse parse-int-fn parse-int)
       (parse parse-bool-fn parse-boolean)
+      (append default)
+      (validate required)
       (dump dump-fn)))
