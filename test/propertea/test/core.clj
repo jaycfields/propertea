@@ -45,4 +45,16 @@
 ;;; and it is also required
 (expect RuntimeException (read-properties fp :required [:string-example] :parse-int [:string-example]))
 
+;;; show me the properties
+(expect java.util.Properties (map->properties {"A" 1 "B" 2}))
+
+;;; get a value
+(expect 1 (.get (map->properties {"A" 1 "B" 2}) "A"))
+
+;;; get a value after converting keywords to strings
+(expect 1 (.get (map->properties {:A 1 :B 2}) "A"))
+
+;;; get a value after converting symbols to strings
+(expect 1 (.get (map->properties {'A 1 'B 2}) "A"))
+
 ;;; convert a map to a properties object
