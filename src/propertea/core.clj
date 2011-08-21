@@ -8,11 +8,20 @@
     m
     (clojure.walk/keywordize-keys m)))
 
+(defn- dash-match [[ _ g1 g2]]
+  (str g1 "-" g2))
+
+(defn- dasherize [k]
+  (-> k
+      (clojure.string/replace #"([A-Z]+)([A-Z][a-z])" dash-match)
+      (clojure.string/replace #"([a-z\d])([A-Z])" dash-match)
+      (clojure.string/lower-case)))
+
 (defn- properties->map [props nested]
   (reduce (fn [r [k v]]
             (if nested
-             (assoc-in r (clojure.string/split k #"\.") v)
-             (assoc r k v)))
+              (assoc-in r (clojure.string/split (dasherize k) #"\.") v)
+              (assoc r (dasherize k) v)))
           {}
           props))
 

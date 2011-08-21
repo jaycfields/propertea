@@ -71,6 +71,13 @@
          (read-properties fp :nested true)
          [:nested :example :leaves]))
 
-(expect ["nested.example.leaves" "int-example" "empty-string"
-         "string-example" "nested.example.depth" "boolean-example"]
-        (keys (read-properties fp :stringify-keys true)))
+(expect [String]
+        (->> (read-properties fp :stringify-keys true)
+            keys
+            (map class)
+            distinct))
+
+(expect "get-dashed"
+        (get-in
+         (read-properties fp :nested true)
+         [:nested :with-camel-case]))
