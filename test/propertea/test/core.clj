@@ -30,7 +30,8 @@
 (expect :def-val (:l (read-properties fp :default [:l :def-val])))
 
 ;;; don't include a default value if a value does exist
-(expect "hello-string" (:string-example (read-properties fp :default [:string-example :def-val])))
+(expect "hello-string"
+        (:string-example (read-properties fp :default [:string-example :def-val])))
 
 ;;; include a default value even if parsing fails due to it not existing
 (expect true? (:l (read-properties fp :default [:l true] :parse-boolean [:l])))
@@ -43,7 +44,8 @@
 
 ;;; throw an exception if invalid parsing occurs, resulting in nil
 ;;; and it is also required
-(expect RuntimeException (read-properties fp :required [:string-example] :parse-int [:string-example]))
+(expect RuntimeException
+        (read-properties fp :required [:string-example] :parse-int [:string-example]))
 
 ;;; show me the properties
 (expect java.util.Properties (map->properties {"A" 1 "B" 2}))
@@ -68,3 +70,7 @@
         (get-in
          (read-properties fp :nested true)
          [:nested :example :leaves]))
+
+(expect ["nested.example.leaves" "int-example" "empty-string"
+         "string-example" "nested.example.depth" "boolean-example"]
+        (keys (read-properties fp :stringify-keys true)))

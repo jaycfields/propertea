@@ -3,15 +3,18 @@
   (:import [java.io FileReader]
            [java.util Properties]))
 
+(defn- keywordize-keys-unless [m b]
+  (if b
+    m
+    (clojure.walk/keywordize-keys m)))
+
 (defn- properties->map [props nested]
-  (->>
-   props
-   (reduce (fn [r [k v]]
-             (if nested
-               (assoc-in r (clojure.string/split k #"\.") v)
-               (assoc r k v)))
-           {})
-   clojure.walk/keywordize-keys))
+  (reduce (fn [r [k v]]
+            (if nested
+             (assoc-in r (clojure.string/split k #"\.") v)
+             (assoc r k v)))
+          {}
+          props))
 
 (defn- file-name->properties [file-name]
   (doto (Properties.)
@@ -81,11 +84,13 @@
                                            required
                                            parse-int
                                            parse-boolean
+                                           stringify-keys
                                            nested
                                            default]}]
   (-> file-name
       file-name->properties
       (properties->map nested)
+      (keywordize-keys-unless stringify-keys)
       (parse parse-int-fn parse-int)
       (parse parse-bool-fn parse-boolean)
       (append default)
