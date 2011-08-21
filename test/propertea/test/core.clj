@@ -57,4 +57,14 @@
 ;;; get a value after converting symbols to strings
 (expect 1 (.get (map->properties {'A 1 'B 2}) "A"))
 
-;;; convert a map to a properties object
+;;; nest map
+(expect "5"
+        (get-in
+         (read-properties fp :nested true)
+         [:nested :example :depth]))
+
+;;; nest map
+(expect "2"
+        (get-in
+         (read-properties fp :nested true)
+         [:nested :example :leaves]))
