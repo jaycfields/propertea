@@ -17,11 +17,11 @@
       (clojure.string/replace #"([a-z\d])([A-Z])" dash-match)
       (clojure.string/lower-case)))
 
-(defn- properties->map [props nested]
+(defn- properties->map [props nested kf]
   (reduce (fn [r [k v]]
             (if nested
-              (assoc-in r (clojure.string/split (dasherize k) #"\.") v)
-              (assoc r (dasherize k) v)))
+              (assoc-in r (clojure.string/split (kf k) #"\.") v)
+              (assoc r (kf k) v)))
           {}
           props))
 
@@ -94,11 +94,12 @@
                                            parse-int
                                            parse-boolean
                                            stringify-keys
+                                           dasherize-keys
                                            nested
                                            default]}]
   (-> file-name
       file-name->properties
-      (properties->map nested)
+      (properties->map nested (if dasherize-keys dasherize identity))
       (keywordize-keys-unless stringify-keys)
       (parse parse-int-fn parse-int)
       (parse parse-bool-fn parse-boolean)

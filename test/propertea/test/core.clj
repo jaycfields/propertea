@@ -79,5 +79,10 @@
 
 (expect "get-dashed"
         (get-in
-         (read-properties fp :nested true)
+         (read-properties fp :nested true :dasherize-keys true)
          [:nested :with-camel-case]))
+
+(expect "get-dashed"
+        (get-in
+         (read-properties fp :nested true)
+         [:nested :withCamelCase]))
