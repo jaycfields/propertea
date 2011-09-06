@@ -79,9 +79,9 @@
   (reduce
    (fn [r [k v]]
      (cond
-      (keyword? k) (.put r (name k) v)
-      (symbol? k) (.put r (name k) v)
-      :else (.put r k v))
+      (keyword? k) (.put r (name k) (str v))
+      (symbol? k) (.put r (name k) (str v))
+      :else (.put r (str k) (str v)))
      r)
    (Properties.)
    m))

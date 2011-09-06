@@ -51,13 +51,16 @@
 (expect java.util.Properties (map->properties {"A" 1 "B" 2}))
 
 ;;; get a value
-(expect 1 (.get (map->properties {"A" 1 "B" 2}) "A"))
+(expect "1" (.get (map->properties {"A" 1 "B" 2}) "A"))
 
 ;;; get a value after converting keywords to strings
-(expect 1 (.get (map->properties {:A 1 :B 2}) "A"))
+(expect "1" (.get (map->properties {:A 1 :B 2}) "A"))
 
 ;;; get a value after converting symbols to strings
-(expect 1 (.get (map->properties {'A 1 'B 2}) "A"))
+(expect "1" (.get (map->properties {'A 1 'B 2}) "A"))
+
+;;; get a value after converting any object to a string
+(expect "1" (.get (map->properties {1 1 2 2}) "1"))
 
 ;;; nest map
 (expect "5"
