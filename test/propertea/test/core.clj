@@ -1,12 +1,18 @@
 (ns propertea.test.core
+  (:import [java.util Properties])
   (:use [propertea.core] :reload)
   (:use [expectations])
   (:require clojure.java.io))
 
 (def fp (clojure.java.io/file "test/fake.properties"))
 
+(def props (doto (Properties.) (.setProperty "key-from-properties" "value-in-properties")))
+
 ;;; read a string
 (expect "hello-string" (:string-example (read-properties fp)))
+
+;;; read a string from properties object
+(expect "value-in-properties" (:key-from-properties (read-properties props)))
 
 ;;; read and convert the string into an int
 (expect 1 (:int-example (read-properties fp :parse-int [:int-example])))

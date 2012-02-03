@@ -89,20 +89,25 @@
 (defn append [m defaults]
   (merge (apply hash-map defaults) m))
 
-(defn read-properties [file-name & {:keys [dump-fn
-                                           required
-                                           parse-int
-                                           parse-boolean
-                                           stringify-keys
-                                           dasherize-keys
-                                           nested
-                                           default]}]
-  (-> file-name
-      file-name->properties
-      (properties->map nested (if dasherize-keys dasherize identity))
-      (keywordize-keys-unless stringify-keys)
-      (parse parse-int-fn parse-int)
-      (parse parse-bool-fn parse-boolean)
-      (append default)
-      (validate required)
-      (dump dump-fn)))
+(defmulti read-properties (fn [x & _] (class x)))
+
+(defmethod read-properties Properties [props & {:keys [dump-fn
+                                                       required
+                                                       parse-int
+                                                       parse-boolean
+                                                       stringify-keys
+                                                       dasherize-keys
+                                                       nested
+                                                       default]}]
+  (-> props
+    (properties->map nested (if dasherize-keys dasherize identity))
+    (keywordize-keys-unless stringify-keys)
+    (parse parse-int-fn parse-int)
+    (parse parse-bool-fn parse-boolean)
+    (append default)
+    (validate required)
+    (dump dump-fn)))
+
+(defmethod read-properties :default [file & x]
+  (let [props (file-name->properties file)]
+    (apply read-properties props x)))
